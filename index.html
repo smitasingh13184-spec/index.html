@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Roll Call Attendance App</title>
+
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            margin: 0;
+            background: #f4f7ff;
+        }
+
+        .page { 
+            display: none; 
+            padding: 20px;
+            text-align: center;
+            animation: fade 0.4s ease-in-out;
+        }
+        .active { display: block; }
+
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            background: #0047b3;
+            color: white;
+            padding: 15px 0;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+
+        button {
+            padding: 12px 30px;
+            background-color: #0047b3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: 0.2s;
+        }
+        button:hover { background-color: #003080; }
+
+        input {
+            padding: 12px;
+            width: 80%;
+            margin: 12px 0;
+            border-radius: 10px;
+            border: 1px solid gray;
+            font-size: 16px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px 10px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: 0.2s;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+        }
+
+        .msgBox {
+            background: white;
+            padding: 18px;
+            width: 90%;
+            margin: 20px auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+            font-size: 18px;
+            font-weight: 600;
+            color: #003580;
+        }
+        
+        /* --- STYLES FOR NOTICE BOARD TABLE --- */
+        .schedule-table-container {
+            overflow-x: auto; 
+            max-width: 100%;
+            margin: 20px 0;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px; 
+            text-align: left;
+            margin: 0 auto;
+        }
+
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        .schedule-table th {
+            background-color: #0047b3;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .schedule-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .schedule-table td:nth-child(1) { /* Date column */
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div id="frontPage" class="page active">
+    <h1 style="color:#0047b3; font-size:32px; margin-top:40px;">Welcome to roll call</h1>
+    <p style="font-size:18px; color:#444;">Attendance • Homework • Classes • Results</p>
+    <button onclick="showForm()">Get Started</button>
+</div>
+
+
+
+<div id="formPage" class="page">
+    <div class="header">Roll Call</div>
+
+    <h2 style="margin-top:30px;">Enter Your Details</h2>
+
+    <input id="name" type="text" placeholder="Enter Your Name"><br>
+    <input id="phone" type="text" placeholder="Enter Phone Number"><br>
+
+    <button onclick="openDashboard()">Continue</button>
+</div>
+
+
+
+<div id="dashboardPage" class="page">
+    <div class="header">Student Dashboard</div>
+
+    <h2 id="welcomeText"></h2>
+
+    <div class="grid">
+        <div class="card" onclick="openAlertPage()">📢<br>Alert</div>
+        <div class="card" onclick="openAttendanceReport()">📝<br>Attendance Report</div>
+        <div class="card" onclick="openHomework()">📚<br>Homework</div>
+        <div class="card" onclick="openAssignments()">📄<br>Assignments</div>
+        <div class="card" onclick="openVideoClass()">🎥<br>Video Classes</div>
+        <div class="card" onclick="openLiveClass()">🔴<br>Live Class</div>
+        <div class="card">📁<br>E-Docs</div>
+        <div class="card" onclick="openNoticeBoard()">📌<br>Notice Board</div>
+        <div class="card">🏆<br>Exam Marks</div>
+    </div>
+</div>
+
+
+
+<div id="alertPage" class="page">
+    <div class="header">Important Alerts</div>
+
+    <div class="msgBox">📘 Exam will start from <b>10 December 2025</b></div>
+    <div class="msgBox">📝 Students must submit their assignments before Wednesday (10 December 2025)</div>
+    <div class="msgBox">🎫 All students should wear their ID card</div>
+
+    <br><button onclick="show('alertPage','dashboardPage')">Back</button>
+</div>
+
+
+<div id="assignmentsPage" class="page">
+    <div class="header">Assignments</div>
+    <div class="msgBox">📄 No new assignment today.</div>
+    <br><button onclick="show('assignmentsPage','dashboardPage')">Back</button>
+</div>
+
+
+<div id="noticeBoardPage" class="page">
+    <div class="header">Notice Board: Exam Schedule</div>
+    
+    <p style="margin-top:20px; font-weight:600; color:#333;">Pre University Examination Schedule for B.Tech 2nd Year (Odd Sem. 2025-26)</p>
+    <p style="font-size:14px; color:#555;">From December 10, 2025</p>
+
+    <div class="schedule-table-container">
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Shift</th>
+                    <th>Time</th>
+                    <th>Semester/Year</th>
+                    <th>B.Tech. 3rd Semester</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2">10-Dec-25</td>
+                    <td>I-Shift</td>
+                    <td>09:30 AM-12:30 PM</td>
+                    <td>3rd Sem/ 2nd Year</td>
+                    <td>CE: BVE301/Universal Human Value and Professional Ethics<br>CSE/ADML: BAS301/Technical Communication<br>CSE/ADML: BAS301/Technical Communication<br>IT: BVE301/Universal Human Value and Professional Ethics<br>ECE: BVE301/Universal Human Value and Professional Ethics<br>EE: BVE301/Universal Human Value and Professional Ethics<br>ME: BAS301/Technical Communication<br>EE: BVE301/Universal Human Value and Professional Ethics</td>
+                </tr>
+                <tr>
+                    <td>II-Shift</td>
+                    <td>02:00 PM-05:00 PM</td>
+                    <td>3rd Sem/ 2nd Year</td>
+                    <td>CE: BCE301/Engineering Mechanics<br>CSE: BCS301/Data Structure<br>CSE/ADML: BCS301/Data Structure<br>CS/DS: BCS301/Data Structure<br>IT/AI: BEC301/Electronics Devices<br>IT: BCS301/Data Structure<br>ME: BME301/THERMODYNAMICS<br>EE: BUE301/Electromagnetic Field Theory</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">11-Dec-25</td>
+                    <td>I-Shift</td>
+                    <td>09:30 AM-12:30 PM</td>
+                    <td>3rd Sem/ 2nd Year</td>
+                    <td>CE: BCE302/Surveying and Geomatics<br>CSE/ADML: BCS302/Computer Organization And Architecture<br>CSE/ADML: BCS302/Computer Organization And Architecture<br>CSE/DS: BCS302/Computer Organization And Architecture<br>IT/AI: BEC302/Digital System Design<br>IT: BCS302/Computer Organization And Architecture<br>ME: BME302/FLUID MECHANICS & FLUID MACHINES<br>EE: BUE302/Electrical Measurements & Instrumentation</td>
+                </tr>
+                <tr>
+                    <td>II-Shift</td>
+                    <td>02:00 PM-05:00 PM</td>
+                    <td>3rd Sem/ 2nd Year</td>
+                    <td>CE: BCE303/Fluid Mechanics<br>CSE: BCS303/Discrete Structures & Theory Of Logic<br>CSE/ADML: BCS303/Discrete Structures & Theory Of Logic<br>CSE/DS: BCS303/Discrete Structures & Theory Of Logic<br>IT/AI: BEC303/Network Analysis and synthesis<br>IT: BCS303/Discrete Structures & Theory Of Logic<br>ME: BME303/MATERIALS ENGINEERING<br>EE: BFE303/Digital Signals & Systems</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">12-Dec-25</td>
+                    <td>I-Shift</td>
+                    <td>09:30 AM-12:30 PM</td>
+                    <td>3rd Sem/ 2nd Year</td>
+                    <td>CE: BAS303/Mathematics IV<br>CSE/ADML: BCS309/Electronics Engineering<br>CSE/ADML: BAS303/Math IV<br>CSE/DS: BAS303/Mathematics IV<br>ECE: BAS303/Maths IV<br>IT: BCS309/Electronics Engineering<br>ME: BAS303/Math IV<br>EE: BAS303/Math IV</td>
+                </tr>
+                <tr>
+                    <td>II-Shift</td>
+                    <td>02:00 PM-05:00 PM</td>
+                    <td>3rd Sem/ 2nd Year</td>
+                    <td>CE: BCC301/Cyber Security<br>CSE/ADML: BCC301/Cyber Security<br>CSE/ADML: BCC301/Cyber Security<br>CSE/DS: BCC301/Cyber Security<br>ECE: BCC301/Cyber Security<br>IT: BCC301/Cyber Security<br>ME: BCC301/Cyber Security<br>EE: BCC301/Cyber Security</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br><button onclick="show('noticeBoardPage','dashboardPage')">Back</button>
+</div>
+
+
+<div id="homeworkPage" class="page">
+    <div class="header">Homework</div>
+    <div class="msgBox">📚 No homework today.</div>
+    <br><button onclick="show('homeworkPage','dashboardPage')">Back</button>
+</div>
+
+
+
+<div id="liveClassPage" class="page">
+    <div class="header">Live Class</div>
+    <div class="msgBox">🔴 No live class is scheduled today.</div>
+    <br><button onclick="show('liveClassPage','dashboardPage')">Back</button>
+</div>
+
+
+
+<div id="videoClassPage" class="page">
+    <div class="header">Video Classes</div>
+    <div class="msgBox">🎥 No video classes today.</div>
+    <br><button onclick="show('videoClassPage','dashboardPage')">Back</button>
+</div>
+
+
+
+<div id="attendancePage" class="page">
+    <div class="header">Attendance Verification</div>
+
+    <h2>Live Verification Required</h2>
+
+    <div class="attendance-box">
+
+        <div class="section">
+            <h3>📸 Live Camera</h3>
+            <video id="camera" autoplay></video>
+            <button onclick="takePhoto()">Capture Photo</button>
+            <canvas id="photoCanvas"></canvas>
+        </div>
+
+        <div class="section">
+            <h3>📍 Live Location</h3>
+            <p id="locationText">Fetching location...</p>
+            <button onclick="getLocation()">Refresh Location</button>
+        </div>
+
+    </div>
+
+    <br><br>
+    <button onclick="submitAttendance()">Submit Attendance</button>
+</div>
+
+
+
+<div id="successPage" class="page">
+    <div class="header">Attendance Submitted</div>
+    <h2 style="color: green; margin-top: 40px;">Today's Attendance Marked Successfully ✔</h2>
+</div>
+
+
+
+<script>
+
+function showForm() { show("frontPage", "formPage"); }
+
+function openDashboard() {
+    let name = document.getElementById("name").value;
+    if (name === "") { alert("Please fill all fields!"); return; }
+    show("formPage", "dashboardPage");
+    document.getElementById("welcomeText").innerText = "Welcome, " + name + "!";
+}
+
+function openAttendanceReport() {
+    show("dashboardPage", "attendancePage");
+    startCamera();
+    getLocation();
+}
+
+function openAlertPage() { show("dashboardPage", "alertPage"); }
+function openHomework() { show("dashboardPage", "homeworkPage"); }
+function openLiveClass() { show("dashboardPage", "liveClassPage"); }
+function openVideoClass() { show("dashboardPage", "videoClassPage"); }
+function openNoticeBoard() { show("dashboardPage", "noticeBoardPage"); }
+function openAssignments() { show("dashboardPage", "assignmentsPage"); } // NEW FUNCTION
+
+function show(hide, show) {
+    document.getElementById(hide).classList.remove("active");
+    document.getElementById(show).classList.add("active");
+}
+
+
+
+/* CAMERA */
+function startCamera() {
+    const cameraVideo = document.getElementById("camera");
+    if (cameraVideo) {
+        navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+            cameraVideo.srcObject = stream;
+        }).catch(err => {
+            console.error("Could not start camera:", err);
+        });
+    }
+}
+
+function takePhoto() {
+    let video = document.getElementById("camera");
+    let canvas = document.getElementById("photoCanvas");
+    let ctx = canvas.getContext("2d");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    alert("Photo Captured!");
+}
+
+
+
+/* LOCATION */
+const LIVE_LAT = 26.887687;
+const LIVE_LON = 81.057181;
+const ALLOWED_RADIUS = 300;
+
+function getLocation() {
+    const locationText = document.getElementById("locationText");
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+            let lat = pos.coords.latitude;
+            let lon = pos.coords.longitude;
+
+            let dist = calculateDistance(lat, lon, LIVE_LAT, LIVE_LON);
+
+            locationText.innerHTML =
+                "Latitude: " + lat.toFixed(5) +
+                "<br>Longitude: " + lon.toFixed(5) +
+                "<br><b>Distance from LIVE:</b> " + dist.toFixed(2) + " meters";
+
+            window.isInsideCampus = dist <= ALLOWED_RADIUS;
+        }, err => {
+            locationText.innerHTML = "Error fetching location.";
+            window.isInsideCampus = false;
+        });
+    } else {
+        locationText.innerHTML = "Geolocation not supported by this browser.";
+        window.isInsideCampus = false;
+    }
+}
+
+/* distance */
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    let R = 6371000;
+    let dLat = (lat2 - lat1) * Math.PI/180;
+    let dLon = (lon2 - lon1) * Math.PI/180;
+    let a =
+        Math.sin(dLat/2)**2 +
+        Math.cos(lat1*Math.PI/180) *
+        Math.cos(lat2*Math.PI/180) *
+        Math.sin(dLon/2)**2;
+
+    return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+
+
+/* SUBMIT ATTENDANCE */
+function submitAttendance() {
+    if (!window.isInsideCampus) {
+        alert("❌ You must be inside BBDITM Campus to mark attendance.");
+        return;
+    }
+
+    // In a real app, you would verify if a photo was captured before submission.
+    show("attendancePage", "successPage");
+}
+
+</script>
+
+</body>
+</html>
